@@ -24,7 +24,7 @@ EOF
   kubectl create secret generic $SECRETS -n $NS_NAME --from-env-file $SECRETS_FN
 }
 
-app(){
+deploy_app(){
 
 
   IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-loom:latest
@@ -47,13 +47,18 @@ echo "------------------"
 kubectl get ns $NS_NAME || kubectl create namespace $NS_NAME
 write_secrets
 
-#app
 
+deploy_injector(){
 
-IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-loom-injector:latest
-echo "the injector image is $IMAGE_NAME "
-$GITHUB_WORKSPACE/deploy/write_ips.sh
-docker build -t $IMAGE_NAME -f $GITHUB_WORKSPACE/deploy/Dockerfile $GITHUB_WORKSPACE/deploy
-docker push $IMAGE_NAME
-kubectl delete -f $GITHUB_WORKSPACE/deploy/injector-pod.yml
-kubectl apply -f $GITHUB_WORKSPACE/deploy/injector-pod.yml
+  IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-loom-injector:latest
+  echo "the injector image is $IMAGE_NAME "
+  $GITHUB_WORKSPACE/deploy/write_ips.sh
+  docker build -t $IMAGE_NAME -f $GITHUB_WORKSPACE/deploy/Dockerfile $GITHUB_WORKSPACE/deploy
+  docker push $IMAGE_NAME
+  kubectl delete -f $GITHUB_WORKSPACE/deploy/injector-pod.yml
+  kubectl apply -f $GITHUB_WORKSPACE/deploy/injector-pod.yml
+
+}
+
+deploy_app
+deploy_injector
