@@ -26,7 +26,7 @@ DB_PASSWORD=${DB_PASSWORD}
 DB_HOST=${DB_HOST}
 DB_SCHEMA=${DB_SCHEMA}
 DEBUG=true
-SPRING_THREADS_VIRTUAL_ENABLED=false
+SPRING_THREADS_VIRTUAL_ENABLED=true
 EOF
 
   kubectl delete secrets -n $NS_NAME $SECRETS || echo "no secrets to delete."
