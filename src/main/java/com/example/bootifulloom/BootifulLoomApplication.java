@@ -18,6 +18,9 @@ import static org.springframework.web.servlet.function.ServerResponse.ok;
 public class BootifulLoomApplication {
 
     public static void main(String[] args) {
+
+        System.getenv().forEach((k, v) -> System.out.println(k + ": " + v));
+
         SpringApplication.run(BootifulLoomApplication.class, args);
     }
 

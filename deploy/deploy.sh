@@ -48,9 +48,9 @@ APP_NAME=bootiful-loom
 IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/${APP_NAME}:latest
 cd $GITHUB_WORKSPACE
 # todo
-#./mvnw --batch-mode --no-transfer-progress -DskipTests -Pnative native:compile
-#docker build . -f $GITHUB_WORKSPACE/deploy/Dockerfile  -t $IMAGE_NAME --build-arg APP_NAME=$APP_NAME
-#docker push $IMAGE_NAME
+./mvnw --batch-mode --no-transfer-progress -DskipTests -Pnative native:compile
+docker build . -f $GITHUB_WORKSPACE/deploy/Dockerfile  -t $IMAGE_NAME --build-arg APP_NAME=$APP_NAME
+docker push $IMAGE_NAME
 ## /todo
 
 Y=app-${APP_NAME}-data.yml
