@@ -32,6 +32,8 @@ spec:
             - secretRef:
                 name: devoxx-uk-2024-secrets
           env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:ActiveProcessorCount=-1"
             - name: SERVER_PORT
               value:  #@ str(data.values.port)
             - name: LANG
