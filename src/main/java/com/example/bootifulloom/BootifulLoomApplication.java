@@ -1,5 +1,6 @@
 package com.example.bootifulloom;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +22,11 @@ public class BootifulLoomApplication {
     }
 
     @Bean
-    RouterFunction<ServerResponse> httpRoutes(CustomerRepository repository) {
+    RouterFunction<ServerResponse> httpRoutes(
+            @Value("${spring.threads.virtual.enabled}") boolean virtualEnabled,
+            CustomerRepository repository) {
         return route()
+                .GET("/threads", r -> ok().body(Map.of("spring.threads.virtual.enabled", virtualEnabled)))
                 .GET("/customers", request -> ok().body(repository.findAll()))
                 .GET("/hello", request -> ok().body(Map.of("message", "Hello, world!")))
                 .build();

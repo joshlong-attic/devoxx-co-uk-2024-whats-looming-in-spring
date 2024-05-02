@@ -51,9 +51,9 @@ IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/${APP_NAM
 cd $GITHUB_WORKSPACE
 # todo
 # todo restore the following 3 lines!
-#./mvnw --batch-mode --no-transfer-progress -DskipTests -Pnative native:compile
-#docker build . -f $GITHUB_WORKSPACE/deploy/Dockerfile  -t $IMAGE_NAME --build-arg APP_NAME=$APP_NAME
-#docker push $IMAGE_NAME
+./mvnw --batch-mode --no-transfer-progress -DskipTests -Pnative native:compile
+docker build . -f $GITHUB_WORKSPACE/deploy/Dockerfile  -t $IMAGE_NAME --build-arg APP_NAME=$APP_NAME
+docker push $IMAGE_NAME
 ##
 
 Y=app-${APP_NAME}-data.yml
