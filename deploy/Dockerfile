@@ -24,10 +24,10 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN cargo install oha
 
 # Copy the script into the container
-COPY your-script.zsh ./
+COPY test_vt.sh  ./
 
 # Make the script executable
 RUN chmod +x your-script.zsh
 
 # Run zsh by default
-CMD ["zsh", "./your-script.zsh"]
+CMD ["zsh", "./test_vt.sh"]
