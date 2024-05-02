@@ -26,7 +26,7 @@ DB_PASSWORD=${DB_PASSWORD}
 DB_HOST=${DB_HOST}
 DB_SCHEMA=${DB_SCHEMA}
 DEBUG=true
-SPRING_THREADS_VIRTUAL_ENABLED=false
+SPRING_THREADS_VIRTUAL_ENABLED=true
 EOF
 
   kubectl delete secrets -n $NS_NAME $SECRETS || echo "no secrets to delete."
@@ -55,6 +55,7 @@ docker push $IMAGE_NAME
 
 Y=app-${APP_NAME}-data.yml
 D=deployments/${APP_NAME}-deployment
+kubectl delete $D || echo "could not delete the deployment $D "
 OLD_IMAGE=`get_image $D `
 OUT_YML=out.yml
 ytt -f  $GITHUB_WORKSPACE/deploy/$Y -f $GITHUB_WORKSPACE/deploy/data-schema.yml -f $GITHUB_WORKSPACE/deploy/deployment.yml |  kbld -f  -  > ${OUT_YML}
