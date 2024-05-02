@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 cat IPS | while read IP ; do
   URI=http://${IP}:8080

@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 IPS_FN=IPS
 kubectl get services -o json |  jq -r  '.items[].spec.selector.app' | while read svc; do
