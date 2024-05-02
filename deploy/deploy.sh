@@ -49,5 +49,5 @@ echo "the injector image is $IMAGE_NAME "
 $GITHUB_WORKSPACE/deploy/write_ips.sh
 docker build -t $IMAGE_NAME -f $GITHUB_WORKSPACE/deploy/Dockerfile $GITHUB_WORKSPACE/deploy
 docker push $IMAGE_NAME
-kubectl apply -f $GITHUB_WORKSPACE/deploy/injector-pod.yml
 kubectl delete -f $GITHUB_WORKSPACE/deploy/injector-pod.yml
+kubectl apply -f $GITHUB_WORKSPACE/deploy/injector-pod.yml
