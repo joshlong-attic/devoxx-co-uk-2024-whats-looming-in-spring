@@ -36,20 +36,24 @@ kubectl get ns $NS_NAME || kubectl create namespace $NS_NAME
 
 write_secrets
 
-cd $ROOT_DIR/k8s/carvel/
+
 
 get_image(){
   kubectl get "$1" -o json  | jq -r  ".spec.template.spec.containers[0].image" || echo "no old version to compare against"
 }
 
+echo "------------------"
+
 # build and deploy container
 APP_NAME=bootiful-loom
 IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/bootiful-demos-registry/${APP_NAME}:latest
 
+cd $GITHUB_WORKSPACE
 ./mvnw -DskipTests -Pnative spring-boot:build-image -DimageName=$IMAGE_NAME
 docker push $IMAGE_NAME
 
-echo "------------------"
+cd $GITHUB_WORKSPACE/deploy
+
 Y=app-${APP_NAME}-data.yml
 D=deployments/${APP_NAME}-deployment
 OLD_IMAGE=`get_image $D `
