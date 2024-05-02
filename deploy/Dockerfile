@@ -11,12 +11,13 @@ RUN apt-get update && apt-get install -y \
     jq \
     gnupg \
     lsb-release \
+    kubectl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install kubectl
-RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
-    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list && \
-    apt-get update && apt-get install -y kubectl
+## Install kubectl
+#RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
+#    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list && \
+#    apt-get update && apt-get install -y kubectl
 
 # Install Rust and then oha
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
