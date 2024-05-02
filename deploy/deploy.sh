@@ -60,7 +60,7 @@ Y=app-${APP_NAME}-data.yml
 D=deployments/${APP_NAME}-deployment
 OLD_IMAGE=`get_image $D `
 OUT_YML=out.yml
-ytt -f  $Y -f $GITHUB_WORKSPACE/deploy/data-schema.yml -f $GITHUB_WORKSPACE/deploy/deployment.yml |  kbld -f  -  > ${OUT_YML}
+ytt -f  $GITHUB_WORKSPACE/deploy/$Y -f $GITHUB_WORKSPACE/deploy/data-schema.yml -f $GITHUB_WORKSPACE/deploy/deployment.yml |  kbld -f  -  > ${OUT_YML}
 cat ${OUT_YML}
 cat ${OUT_YML} | kubectl apply  -n $NS_NAME -f -
 NEW_IMAGE=`get_image $D`
