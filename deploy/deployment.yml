@@ -45,7 +45,7 @@ kind: Service
 metadata:
   name: #@ data.values.service  + '-service'
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: #@ data.values.service
   ports:

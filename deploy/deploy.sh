@@ -25,18 +25,17 @@ EOF
   kubectl create secret generic $SECRETS -n $NS_NAME --from-env-file $SECRETS_FN
 }
 
-#kubectl get ns $NS_NAME || kubectl create namespace $NS_NAME
-#write_secrets
-
 echo "------------------"
 
+kubectl get ns $NS_NAME || kubectl create namespace $NS_NAME
 
-# build and deploy container
-APP_NAME=bootiful-loom
-IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/${APP_NAME}:latest
-# todo
-#./mvnw -DskipTests spring-boot:build-image  -Dspring-boot.build-image.imageName=$IMAGE_NAME
-#docker push $IMAGE_NAME
+write_secrets
+
+IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-loom:latest
+
+./mvnw -DskipTests spring-boot:build-image  -Dspring-boot.build-image.imageName=$IMAGE_NAME
+
+docker push $IMAGE_NAME
 ## /todo
 
 for APP_NAME in bootiful-loom-with-vt bootiful-loom-without-vt ; do
