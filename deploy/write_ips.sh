@@ -6,3 +6,7 @@ kubectl get services -o json |  jq -r  '.items[].spec.selector.app' | while read
   echo $IP >> $IPS_FN
 done
 
+echo "--------"
+cat $IPS_FN
+echo "--------"
+
