@@ -1,0 +1,20 @@
+#@data/values-schema
+#@ load("@ytt:data", "data")
+---
+service: ""
+container: ""
+url: ""
+port: 8080
+probes:
+  readinessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 60
+    httpGet:
+      port: 8080
+      path: /actuator/health/readiness
+  livenessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 60
+    httpGet:
+      port: 8080
+      path: /actuator/health/liveness
