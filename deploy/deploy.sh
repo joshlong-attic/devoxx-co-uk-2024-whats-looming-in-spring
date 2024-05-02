@@ -48,31 +48,17 @@ APP_NAME=bootiful-loom
 IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/${APP_NAME}:latest
 cd $GITHUB_WORKSPACE
 # todo
-#./mvnw --batch-mode --no-transfer-progress -DskipTests -Pnative native:compile
-#docker build . -f $GITHUB_WORKSPACE/deploy/Dockerfile  -t $IMAGE_NAME --build-arg APP_NAME=$APP_NAME
 ./mvnw -DskipTests spring-boot:build-image  -Dspring-boot.build-image.imageName=$IMAGE_NAME
 docker push $IMAGE_NAME
 ## /todo
 
-Y=app-${APP_NAME}-data.yml
-D=deployments/${APP_NAME}-deployment
-kubectl delete $D || echo "could not delete the deployment $D "
-OLD_IMAGE=`get_image $D `
-OUT_YML=out.yml
-ytt -f  $GITHUB_WORKSPACE/deploy/$Y -f $GITHUB_WORKSPACE/deploy/data-schema.yml -f $GITHUB_WORKSPACE/deploy/deployment.yml |  kbld -f  -  > ${OUT_YML}
-cat ${OUT_YML}
-cat ${OUT_YML} | kubectl apply  -n $NS_NAME -f -
-NEW_IMAGE=`get_image $D`
-echo "comparing container images for the first container!"
-echo $OLD_IMAGE
-echo $NEW_IMAGE
-if [ "$OLD_IMAGE" = "$NEW_IMAGE" ]; then
-  echo "no need to restart $D"
-else
- echo "restarting $D"
- kubectl rollout restart $D
-fi
+for APP_NAME in bootiful-loom-with-vt bootiful-loom-without-vt ; do
+  YAML=${APP_NAME}.yml
+  DEPLOYMENT=deployments/${APP_NAME}-deployment
+  kubectl delete $DEPLOYMENT || echo "could not delete the deployment $DEPLOYMENT "
+  ytt -f $GITHUB_WORKSPACE/deploy/$YAML -f $GITHUB_WORKSPACE/deploy/data-schema.yml -f $GITHUB_WORKSPACE/deploy/deployment.yml |  kbld -f  - | kubectl apply  -n $NS_NAME -f -
+
+done
 
 
 
-cd "$ROOT_DIR"

@@ -1,0 +1,7 @@
+#@data/values
+
+---
+service: bootiful-loom-with-vt
+container: us-docker.pkg.dev/joshlong/mogul-artifact-registry/bootiful-loom:latest
+vt: true
+

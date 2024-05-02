@@ -36,6 +36,8 @@ spec:
               value:  #@ str(data.values.port)
             - name: LANG
               value: "en_US.UTF-8"
+            - name: SPRING_THREADS_VIRTUAL_ENABLED
+              value:  #@ str(data.values.vt)
 
 ---
 apiVersion: v1
