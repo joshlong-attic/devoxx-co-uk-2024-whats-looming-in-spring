@@ -3,8 +3,12 @@
 OUTPUT_DIR=$HOME/Desktop/tests
 
 mkdir -p $OUTPUT_DIR
+echo "=========="
+cat IPS
+echo "=========="
 
 cat IPS | while read IP ; do
+
   URI=http://${IP}:8080
   VT=$( curl ${URI}/threads | jq  -r '.["spring.threads.virtual.enabled"]' )
   echo "the URI is $URI and $VT "
