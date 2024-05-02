@@ -3,6 +3,5 @@
 ---
 service: bootiful-loom
 container: us-docker.pkg.dev/joshlong/mogul-artifact-registry/bootiful-loom:latest
-port: 8080
 
 
