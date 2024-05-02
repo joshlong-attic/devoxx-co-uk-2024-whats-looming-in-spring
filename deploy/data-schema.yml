@@ -2,7 +2,7 @@
 #@ load("@ytt:data", "data")
 ---
 service: ""
-container: ""
+container: "us-docker.pkg.dev/joshlong/mogul-artifact-registry/bootiful-loom:latest"
 vt: false
 url: ""
 port: 8080
