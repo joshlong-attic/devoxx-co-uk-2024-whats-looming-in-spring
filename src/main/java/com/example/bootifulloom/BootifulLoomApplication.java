@@ -26,7 +26,7 @@ public class BootifulLoomApplication {
             @Value("${spring.threads.virtual.enabled}") boolean virtualEnabled,
             CustomerRepository repository) {
         return route()
-                .GET("/threads", r -> ok().body(Map.of("spring.threads.virtual.enabled", virtualEnabled)))
+                .GET("/threads", request -> ok().body(Map.of("spring.threads.virtual.enabled", virtualEnabled)))
                 .GET("/customers", request -> ok().body(repository.findAll()))
                 .GET("/hello", request -> ok().body(Map.of("message", "Hello, world!")))
                 .build();
