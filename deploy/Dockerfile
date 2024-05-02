@@ -4,8 +4,6 @@ FROM ubuntu:latest
 # Set the working directory
 ENV PATH="/usr/src/app:/root/.cargo/bin:${PATH}"
 
-
-
 COPY ./test_vt_from_desktop.sh .
 COPY ./write_ips.sh .
 COPY ./test_vt.sh .
@@ -20,5 +18,4 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
 
 COPY IPS .
 
-# Run zsh by default
-CMD ["zsh", "./test_vt.sh"]
+CMD "./test_vt.sh"
