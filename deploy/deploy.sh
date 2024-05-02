@@ -55,13 +55,13 @@ cd $GITHUB_WORKSPACE
 docker build . -f $GITHUB_WORKSPACE/deploy/Dockerfile  -t $IMAGE_NAME --build-arg APP_NAME=$APP_NAME
 docker push $IMAGE_NAME
 
-cd $GITHUB_WORKSPACE/deploy
+#cd $GITHUB_WORKSPACE/deploy
 
 Y=app-${APP_NAME}-data.yml
 D=deployments/${APP_NAME}-deployment
 OLD_IMAGE=`get_image $D `
 OUT_YML=out.yml
-ytt -APP_NAME $Y -APP_NAME $GITHUB_WORKSPACE/deploy/data-schema.yml -APP_NAME $GITHUB_WORKSPACE/deploy/deployment.yml |  kbld -APP_NAME -  > ${OUT_YML}
+ytt -APP_NAME $Y -APP_NAME $GITHUB_WORKSPACE/deploy/data-schema.yml -APP_NAME $GITHUB_WORKSPACE/deploy/deployment.yml |  kbld -    > ${OUT_YML}
 cat ${OUT_YML}
 cat ${OUT_YML} | kubectl apply  -n $NS_NAME -APP_NAME -
 NEW_IMAGE=`get_image $D`
