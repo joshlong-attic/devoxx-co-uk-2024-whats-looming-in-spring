@@ -8,7 +8,7 @@ kubectl get services -o json |  jq -r  '.items[].spec.selector.app' | while read
   echo "the URI is $URI and $VT "
   OUTPUT_DIR=$HOME/Desktop/tests
   mkdir -p $OUTPUT_DIR
-  for URL_PATH in customers hello; do
+  for URL_PATH in jdbc memory-no-sleep memory-sleep ; do
     for i in {1..5}; do
       oha -c100 -n 1000 --no-tui ${URI}/${URL_PATH} > ${OUTPUT_DIR}/${URL_PATH}-${VT}
     done

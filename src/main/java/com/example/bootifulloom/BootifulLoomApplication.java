@@ -28,12 +28,14 @@ public class BootifulLoomApplication {
     RouterFunction<ServerResponse> httpRoutes(
             @Value("${spring.threads.virtual.enabled}") boolean virtualEnabled,
             CustomerRepository repository) {
+        var greeting = Map.of("Greeting", "Hello World");
         return route()
                 .GET("/threads", request -> ok().body(Map.of("spring.threads.virtual.enabled", virtualEnabled)))
-                .GET("/customers", request -> ok().body(repository.findAll()))
-                .GET("/hello", request -> {
-//                    Thread.sleep(20);
-                    return ok().body(Map.of("message", "Hello, world!"));
+                .GET("/jdbc", request -> ok().body(repository.findAll()))
+                .GET("/memory-no-sleep", request -> ok().body(greeting))
+                .GET("/memory-sleep", request -> {
+                    Thread.sleep(20);
+                    return ok().body(greeting);
                 })
                 .build();
     }
