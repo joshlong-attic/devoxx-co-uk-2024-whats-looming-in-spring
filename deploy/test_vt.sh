@@ -11,6 +11,7 @@ cat IPS | while read IP ; do
   for URL_PATH in jdbc memory-no-sleep memory-sleep ; do
     for i in {1..5}; do
       echo ab -c 100 -n 1000 ${URI}/${URL_PATH}
+      echo hi
       #> ${OUTPUT_DIR}/${URL_PATH}-${VT}
     done
   done
