@@ -9,6 +9,6 @@ kubectl get services -o json |  jq -r  '.items[].spec.selector.app' | while read
   OUTPUT_DIR=$HOME/Desktop/tests
   mkdir -p $OUTPUT_DIR
   for URL_PATH in customers hello; do
-    oha -c100 -n 2000 --no-tui ${URI}/${URL_PATH} > ${OUTPUT_DIR}/${URL_PATH}-${VT}
+    oha -c100 -n 1000 --no-tui ${URI}/${URL_PATH} > ${OUTPUT_DIR}/${URL_PATH}-${VT}
   done
 done
