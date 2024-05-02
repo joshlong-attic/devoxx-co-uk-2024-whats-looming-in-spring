@@ -50,7 +50,7 @@ cd $GITHUB_WORKSPACE
 # todo
 #./mvnw --batch-mode --no-transfer-progress -DskipTests -Pnative native:compile
 #docker build . -f $GITHUB_WORKSPACE/deploy/Dockerfile  -t $IMAGE_NAME --build-arg APP_NAME=$APP_NAME
-./mvnw -DskipTests spring-boot:build-image -DimageName=$IMAGE_NAME
+./mvnw -DskipTests spring-boot:build-image  -Dspring-boot.build-image.imageName=$IMAGE_NAME
 docker push $IMAGE_NAME
 ## /todo
 
