@@ -31,7 +31,10 @@ public class BootifulLoomApplication {
         return route()
                 .GET("/threads", request -> ok().body(Map.of("spring.threads.virtual.enabled", virtualEnabled)))
                 .GET("/customers", request -> ok().body(repository.findAll()))
-                .GET("/hello", request -> ok().body(Map.of("message", "Hello, world!")))
+                .GET("/hello", request -> {
+                    Thread.sleep(100);
+                    return ok().body(Map.of("message", "Hello, world!"));
+                })
                 .build();
     }
 }
