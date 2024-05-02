@@ -4,7 +4,7 @@ FROM ubuntu:latest
 # Set the working directory
 WORKDIR /usr/src/app
 ENV PATH="/usr/src/app:${PATH}"
-
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Copy the script into the container
 COPY test_vt.sh  ./
