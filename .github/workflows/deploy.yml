@@ -55,6 +55,13 @@ jobs:
           export PATH="$PATH:/usr/local/bin"
           ytt version
 
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
+
       - name: Deploy
         run: |
           cd $GITHUB_WORKSPACE
