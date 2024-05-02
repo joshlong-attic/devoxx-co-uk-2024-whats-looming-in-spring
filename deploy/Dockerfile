@@ -2,18 +2,23 @@
 FROM ubuntu:latest
 
 # Set the working directory
-WORKDIR /usr/src/app
-ENV PATH="/usr/src/app:${PATH}"
-ENV PATH="/root/.cargo/bin:${PATH}"
+ENV PATH="/usr/src/app:/root/.cargo/bin:${PATH}"
 
-# Copy the script into the container
-COPY test_vt.sh  ./
-COPY setup_test_vt.sh   ./
 
-# Make the script executable
-RUN chmod +x ./test_vt.sh
-RUN chmod +x ./setup_test_vt.sh
-RUN ./setup_test_vt.sh
+
+COPY ./test_vt_from_desktop.sh .
+COPY ./write_ips.sh .
+COPY ./test_vt.sh .
+
+RUN chmod a+x ./test_vt_from_desktop.sh
+RUN chmod a+x ./write_ips.sh
+RUN chmod a+x ./test_vt.sh
+
+RUN apt-get update && apt-get install -y zsh curl jq  gcc wget apache2-utils
+
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+COPY IPS .
 
 # Run zsh by default
 CMD ["zsh", "./test_vt.sh"]

@@ -29,6 +29,8 @@ kubectl get ns $NS_NAME || kubectl create namespace $NS_NAME
 write_secrets
 
 IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-loom-injector:latest
+echo "the injector image is $IMAGE_NAME "
+./write_ips.sh
 docker build -t $IMAGE_NAME -f $GITHUB_WORKSPACE/deploy/Dockerfile $GITHUB_WORKSPACE/deploy
 docker push $IMAGE_NAME
 
