@@ -36,14 +36,14 @@ IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-
 ./mvnw -DskipTests spring-boot:build-image  -Dspring-boot.build-image.imageName=$IMAGE_NAME
 
 docker push $IMAGE_NAME
-## /todo
+
 
 for APP_NAME in bootiful-loom-with-vt bootiful-loom-without-vt ; do
   YAML=${APP_NAME}.yml
   DEPLOYMENT=deployments/${APP_NAME}-deployment
   echo "deploying ${DEPLOYMENT} ..."
   kubectl delete $DEPLOYMENT || echo "could not delete the deployment $DEPLOYMENT "
-  ytt -f $GITHUB_WORKSPACE/deploy/$YAML -f $GITHUB_WORKSPACE/deploy/data-schema.yml -f $GITHUB_WORKSPACE/deploy/deployment.yml |  kbld -f  - | kubectl apply  -n $NS_NAME -f -
+  ytt -f "$GITHUB_WORKSPACE"/deploy/$YAML -f "$GITHUB_WORKSPACE"/deploy/data-schema.yml -f "$GITHUB_WORKSPACE"/deploy/deployment.yml |  kbld -f  - | kubectl apply  -n $NS_NAME -f -
 
 done
 
