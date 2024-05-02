@@ -46,11 +46,8 @@ echo "------------------"
 
 # build and deploy container
 APP_NAME=bootiful-loom
-IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/bootiful-demos-registry/${APP_NAME}:latest
-
+IMAGE_NAME=us-east4-docker.pkg.dev/${GCLOUD_PROJECT}/bootiful-demos-registry/${APP_NAME}:latest
 cd $GITHUB_WORKSPACE
-#./mvnw -DskipTests -Pnative spring-boot:build-image -DimageName=$IMAGE_NAME
-
 ./mvnw --batch-mode --no-transfer-progress -DskipTests -Pnative native:compile
 docker build . -f $GITHUB_WORKSPACE/deploy/Dockerfile  -t $IMAGE_NAME --build-arg APP_NAME=$APP_NAME
 docker push $IMAGE_NAME
