@@ -14,3 +14,13 @@ cat IPS | while read IP ; do
     done
   done
 done
+
+echo "======================================"
+echo "RESULTS"
+
+find ${OUTPUT_DIR} -type f | while read l ; do
+
+  echo "Filename: $l"
+  cat $l
+
+done

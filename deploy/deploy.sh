@@ -34,7 +34,6 @@ $GITHUB_WORKSPACE/deploy/write_ips.sh
 docker build -t $IMAGE_NAME -f $GITHUB_WORKSPACE/deploy/Dockerfile $GITHUB_WORKSPACE/deploy
 docker push $IMAGE_NAME
 
-#docker build -t your-image-name:your-tag .
 
 IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-loom:latest
 ./mvnw -DskipTests spring-boot:build-image  -Dspring-boot.build-image.imageName=$IMAGE_NAME
