@@ -27,7 +27,7 @@ RUN cargo install oha
 COPY test_vt.sh  ./
 
 # Make the script executable
-RUN chmod +x your-script.zsh
+RUN chmod +x ./test_vt.sh
 
 # Run zsh by default
 CMD ["zsh", "./test_vt.sh"]
