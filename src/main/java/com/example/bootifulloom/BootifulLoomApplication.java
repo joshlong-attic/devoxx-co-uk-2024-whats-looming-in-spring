@@ -32,7 +32,7 @@ public class BootifulLoomApplication {
                 .GET("/threads", request -> ok().body(Map.of("spring.threads.virtual.enabled", virtualEnabled)))
                 .GET("/customers", request -> ok().body(repository.findAll()))
                 .GET("/hello", request -> {
-                    Thread.sleep(20);
+//                    Thread.sleep(20);
                     return ok().body(Map.of("message", "Hello, world!"));
                 })
                 .build();
