@@ -55,6 +55,7 @@ docker push $IMAGE_NAME
 for APP_NAME in bootiful-loom-with-vt bootiful-loom-without-vt ; do
   YAML=${APP_NAME}.yml
   DEPLOYMENT=deployments/${APP_NAME}-deployment
+  echo "deploying ${DEPLOYMENT} ..."
   kubectl delete $DEPLOYMENT || echo "could not delete the deployment $DEPLOYMENT "
   ytt -f $GITHUB_WORKSPACE/deploy/$YAML -f $GITHUB_WORKSPACE/deploy/data-schema.yml -f $GITHUB_WORKSPACE/deploy/deployment.yml |  kbld -f  - | kubectl apply  -n $NS_NAME -f -
 
