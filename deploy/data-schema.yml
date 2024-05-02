@@ -3,6 +3,7 @@
 ---
 service: ""
 container: ""
+vt: false
 url: ""
 port: 8080
 probes:
