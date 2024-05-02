@@ -42,28 +42,32 @@ get_image(){
   kubectl get "$1" -o json  | jq -r  ".spec.template.spec.containers[0].image" || echo "no old version to compare against"
 }
 
-for f in bootiful-loom ; do
+# build and deploy container
+APP_NAME=bootiful-loom
+IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/bootiful-demos-registry/${APP_NAME}:latest
 
-  echo "------------------"
-  Y=app-${f}-data.yml
-  D=deployments/${f}-deployment
-  OLD_IMAGE=`get_image $D `
-  OUT_YML=out.yml
-  ytt -f $Y -f "$ROOT_DIR"/k8s/carvel/data-schema.yml -f "$ROOT_DIR"/k8s/carvel/deployment.yml |  kbld -f -  > ${OUT_YML}
-  cat ${OUT_YML}
-  cat ${OUT_YML} | kubectl apply  -n $NS_NAME -f -
-  NEW_IMAGE=`get_image $D`
-  echo "comparing container images for the first container!"
-  echo $OLD_IMAGE
-  echo $NEW_IMAGE
-  if [ "$OLD_IMAGE" = "$NEW_IMAGE" ]; then
-    echo "no need to restart $D"
-  else
-   echo "restarting $D"
-   kubectl rollout restart $D
-  fi
+./mvnw -DskipTests -Pnative spring-boot:build-image -DimageName=$IMAGE_NAME
+docker push $IMAGE_NAME
 
-done
+echo "------------------"
+Y=app-${APP_NAME}-data.yml
+D=deployments/${APP_NAME}-deployment
+OLD_IMAGE=`get_image $D `
+OUT_YML=out.yml
+ytt -APP_NAME $Y -APP_NAME "$ROOT_DIR"/k8s/carvel/data-schema.yml -APP_NAME "$ROOT_DIR"/k8s/carvel/deployment.yml |  kbld -APP_NAME -  > ${OUT_YML}
+cat ${OUT_YML}
+cat ${OUT_YML} | kubectl apply  -n $NS_NAME -APP_NAME -
+NEW_IMAGE=`get_image $D`
+echo "comparing container images for the first container!"
+echo $OLD_IMAGE
+echo $NEW_IMAGE
+if [ "$OLD_IMAGE" = "$NEW_IMAGE" ]; then
+  echo "no need to restart $D"
+else
+ echo "restarting $D"
+ kubectl rollout restart $D
+fi
+
 
 
 cd "$ROOT_DIR"
