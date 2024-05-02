@@ -48,19 +48,19 @@ jobs:
           gcloud --quiet auth configure-docker
           gcloud auth configure-docker us-docker.pkg.dev --quiet
           kubectl get all
-
-      - name: Set up Carvel Tools
-        run: |
-          curl -L https://carvel.dev/install.sh | bash
-          export PATH="$PATH:/usr/local/bin"
-          ytt version
-
-      - uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '21'
-          distribution: 'graalvm'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          cache: maven
+#
+#      - name: Set up Carvel Tools
+#        run: |
+#          curl -L https://carvel.dev/install.sh | bash
+#          export PATH="$PATH:/usr/local/bin"
+#          ytt version
+#
+#      - uses: graalvm/setup-graalvm@v1
+#        with:
+#          java-version: '21'
+#          distribution: 'graalvm'
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          cache: maven
 
       - name: Deploy
         run: |

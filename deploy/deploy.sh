@@ -24,24 +24,30 @@ EOF
   kubectl create secret generic $SECRETS -n $NS_NAME --from-env-file $SECRETS_FN
 }
 
+app(){
+
+
+  IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-loom:latest
+  ./mvnw -DskipTests spring-boot:build-image  -Dspring-boot.build-image.imageName=$IMAGE_NAME
+  docker push $IMAGE_NAME
+
+  for APP_NAME in bootiful-loom-with-vt bootiful-loom-without-vt ; do
+    YAML=${APP_NAME}.yml
+    DEPLOYMENT=deployments/${APP_NAME}-deployment
+    echo "deploying ${DEPLOYMENT} ..."
+    kubectl delete $DEPLOYMENT || echo "could not delete the deployment $DEPLOYMENT "
+    ytt -f "$GITHUB_WORKSPACE"/deploy/$YAML -f "$GITHUB_WORKSPACE"/deploy/data-schema.yml -f "$GITHUB_WORKSPACE"/deploy/deployment.yml |  kbld -f  - | kubectl apply  -n $NS_NAME -f -
+  done
+
+  sleep 60
+
+}
+
 echo "------------------"
 kubectl get ns $NS_NAME || kubectl create namespace $NS_NAME
 write_secrets
 
-IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-loom:latest
-./mvnw -DskipTests spring-boot:build-image  -Dspring-boot.build-image.imageName=$IMAGE_NAME
-docker push $IMAGE_NAME
-
-for APP_NAME in bootiful-loom-with-vt bootiful-loom-without-vt ; do
-  YAML=${APP_NAME}.yml
-  DEPLOYMENT=deployments/${APP_NAME}-deployment
-  echo "deploying ${DEPLOYMENT} ..."
-  kubectl delete $DEPLOYMENT || echo "could not delete the deployment $DEPLOYMENT "
-  ytt -f "$GITHUB_WORKSPACE"/deploy/$YAML -f "$GITHUB_WORKSPACE"/deploy/data-schema.yml -f "$GITHUB_WORKSPACE"/deploy/deployment.yml |  kbld -f  - | kubectl apply  -n $NS_NAME -f -
-done
-
-
-sleep 60
+#app
 
 
 IMAGE_NAME=us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/bootiful-loom-injector:latest
