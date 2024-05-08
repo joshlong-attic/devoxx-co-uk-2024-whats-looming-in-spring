@@ -1,5 +1,0 @@
-#@data/values
-
----
-service: bootiful-loom-without-vt
-vt: false
