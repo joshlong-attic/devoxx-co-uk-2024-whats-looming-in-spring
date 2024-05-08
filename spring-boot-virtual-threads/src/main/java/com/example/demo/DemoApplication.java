@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.web.servlet.function.RouterFunctions.route;
+import static org.springframework.web.servlet.function.ServerResponse.ok;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -40,7 +41,7 @@ public class DemoApplication {
                             .uri("http://localhost:9000/delay/" + request.pathVariable("seconds"))
                             .retrieve()
                             .body(String.class);
-                    return ServerResponse.ok().body(Map.of("thread", Thread.currentThread() + "", "reply", result));
+                    return ok().body(Map.of("thread", Thread.currentThread() + "", "reply", result));
                 })
                 .build();
     }
