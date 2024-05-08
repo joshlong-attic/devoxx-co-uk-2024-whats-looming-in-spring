@@ -1,68 +1,47 @@
 package com.example.demo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.servlet.function.RouterFunction;
+import org.springframework.web.servlet.function.ServerResponse;
 
 import java.util.Map;
+import java.util.Optional;
+
+import static org.springframework.web.servlet.function.RouterFunctions.route;
 
 @SpringBootApplication
 public class DemoApplication {
 
     public static void main(String[] args) {
+        var threads = Integer.toString(Runtime.getRuntime().availableProcessors());
+        System.setProperty("server.tomcat.threads.max", threads);
+        System.setProperty("jdk.virtualThreadScheduler.maxPoolSize", threads);
+        System.setProperty("spring.threads.virtual.enabled", Optional
+                .ofNullable(System.getenv("VT"))
+                .orElse(Boolean.toString(true))
+        );
         SpringApplication.run(DemoApplication.class, args);
     }
 
-}
-
-@Controller
-@ResponseBody
-class DemoController {
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
-
-    private final String url;
-
-    private final RestClient restClient;
-
-    private final boolean virtualThreads  ;
-
-    DemoController(Environment environment, @Value("${spring.threads.virtual.enabled:false}") boolean vt,
-                   @Value("${httpbin.url}") String url, RestClient.Builder builder) {
-        this.restClient = builder.build();
-        this.virtualThreads = vt;
-        this.url = url;
-        log.info("virtual threads enabled? "  + vt );
+    @Bean
+    RestClient restClient(RestClient.Builder builder) {
+        return builder.build();
     }
 
-    @GetMapping("/vt")
-    boolean threads() {
-        return this.virtualThreads ;
+    @Bean
+    RouterFunction<ServerResponse> http(RestClient restClient) {
+        return route()
+                .GET("/{seconds}", request -> {
+                    var result = restClient
+                            .get()
+                            .uri("http://localhost:9000/delay/" + request.pathVariable("seconds"))
+                            .retrieve()
+                            .body(String.class);
+                    return ServerResponse.ok().body(Map.of("thread", Thread.currentThread() + "", "reply", result));
+                })
+                .build();
     }
-
-    @GetMapping("/block/{seconds}")
-    Map<String, String> block(@PathVariable Integer seconds) {
-        // Make a blocking call (network I/O --> thread-per-request, synchronous operation)
-        var resolvedUrl = url + "/delay/" + seconds;
-        log.debug("resolved url: {}", resolvedUrl);
-        var result = restClient
-                .get()
-                .uri(resolvedUrl)
-                .retrieve()
-                .toEntity(String.class);
-
-        log.debug("{} on {}", result.getStatusCode(), Thread.currentThread());
-
-        return Map.of("thread", Thread.currentThread() + "");
-    }
-
-
 }
